@@ -47,7 +47,7 @@ export class GridComponent implements OnInit, OnDestroy {
   }
 
   newGame() {
-    if (this.givenNumbers >= 17) {
+    if (this.givenNumbers >= 17 && this.givenNumbers <= 81) {
       this.timerSubscription.unsubscribe();
       this.solvedNumbers = [];
       this.generatingGame = true;
@@ -58,7 +58,7 @@ export class GridComponent implements OnInit, OnDestroy {
         givenNumbers: this.givenNumbers
       });
     } else {
-      alert("Sudoku board with less than 17 values impossible");
+      alert("Sudoku board needs at least 17 and a maximum of 81 given values");
     }
   }
 
