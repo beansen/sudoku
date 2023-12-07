@@ -54,7 +54,11 @@ function initGrid(startingBoard: Cell[]) {
 function removeValues(amount: number, startingBoard: Cell[]) {
   let removedValues = 0;
   let gridCopy: Cell[] = [];
-  let counter = 0;
+
+  if (amount == 0) {
+    startingBoard.forEach(cell => cell.visible = true);
+    return startingBoard;
+  }
 
   while (removedValues < amount) {
     const cells = startingBoard.filter(cell => cell.value != 0);
