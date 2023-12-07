@@ -1,0 +1,86 @@
+
+<div class="info">
+    <span class="errors"> {{ errors }} </span>
+    <span class="timer"> {{timerOutput }} </span>
+</div>
+<div class="board">
+    <div *ngIf="generatingGame || solvedNumbers.length == 9" class="overlay">
+        <div *ngIf="generatingGame" style="width: 100px;">
+            <div class="loader"></div>
+            <span style="font-size: 20px; color: white;">Generating game</span>
+        </div>
+        <div *ngIf="solvedNumbers.length == 9" style="width: 100%; height: 100%">
+            <div style="font-size: 26px; color: white; margin-top: 60px;">
+                Congratulations
+            </div>
+            <div style="font-size: 20px; color: white; margin-top: 50px;">
+                Elapsed Time: {{getTimeFormated(timeCounter)}}
+            </div>
+            <div style="font-size: 20px; color: white; margin-top: 20px;">
+                Penalty: {{getTimeFormated(errors * 15)}}
+            </div>
+            <hr style="width: 80%;">
+            <div style="font-size: 20px; color: white; margin-top: 20px;">
+                Total: {{getTimeFormated(timeCounter + errors * 15)}}
+            </div>
+        </div>
+    </div>
+    <div *ngIf="startingBoard" style="width: 100%; height: 100%;">
+        <div class="row">
+            <div *ngFor="let cell of cellsRange(0, 8); index as i" (click)="clickedCell(cell)" class="tile" [ngClass]="{'tile-border-left':  i != 0 && i % 3 == 0, 'tile-start': cell.visible && cell.possibleValues.length == 0}">
+                <span *ngIf="cell.visible"> {{ cell.value }} </span>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let cell of cellsRange(9, 17); index as i" (click)="clickedCell(cell)" class="tile" [ngClass]="{'tile-border-left':  i != 0 && i % 3 == 0, 'tile-start': cell.visible && cell.possibleValues.length == 0}">
+                <span *ngIf="cell.visible"> {{ cell.value }} </span>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let cell of cellsRange(18, 26); index as i" (click)="clickedCell(cell)" class="tile" [ngClass]="{'tile-border-left':  i != 0 && i % 3 == 0, 'tile-start': cell.visible && cell.possibleValues.length == 0}">
+                <span *ngIf="cell.visible"> {{ cell.value }} </span>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let cell of cellsRange(27, 35); index as i" (click)="clickedCell(cell)" class="tile" style="border-top: 1px solid black;" [ngClass]="{'tile-border-left':  i != 0 && i % 3 == 0, 'tile-start': cell.visible && cell.possibleValues.length == 0}">
+                <span *ngIf="cell.visible"> {{ cell.value }} </span>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let cell of cellsRange(36, 44); index as i" (click)="clickedCell(cell)" class="tile" [ngClass]="{'tile-border-left':  i != 0 && i % 3 == 0, 'tile-start': cell.visible && cell.possibleValues.length == 0}">
+                <span *ngIf="cell.visible"> {{ cell.value }} </span>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let cell of cellsRange(45, 53); index as i" (click)="clickedCell(cell)" class="tile" [ngClass]="{'tile-border-left':  i != 0 && i % 3 == 0, 'tile-start': cell.visible && cell.possibleValues.length == 0}">
+                <span *ngIf="cell.visible"> {{ cell.value }} </span>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let cell of cellsRange(54, 62); index as i" (click)="clickedCell(cell)" class="tile" style="border-top: 1px solid black;" [ngClass]="{'tile-border-left':  i != 0 && i % 3 == 0, 'tile-start': cell.visible && cell.possibleValues.length == 0}">
+                <span *ngIf="cell.visible"> {{ cell.value }} </span>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let cell of cellsRange(63, 71); index as i" (click)="clickedCell(cell)" class="tile" [ngClass]="{'tile-border-left':  i != 0 && i % 3 == 0, 'tile-start': cell.visible && cell.possibleValues.length == 0}">
+                <span *ngIf="cell.visible"> {{ cell.value }} </span>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngFor="let cell of cellsRange(72, 81); index as i" (click)="clickedCell(cell)" class="tile" [ngClass]="{'tile-border-left':  i != 0 && i % 3 == 0, 'tile-start': cell.visible && cell.possibleValues.length == 0}">
+                <span *ngIf="cell.visible"> {{ cell.value }} </span>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="digits">
+    <div *ngFor="let numb of sudokuNumbers" style="width: 35px; height: 35px; margin: 3px;">
+        <div *ngIf="!solvedNumbers.includes(numb)" (click)="selectNumber(numb)" class="number" [ngClass]="{'number-selected':  selectedNumber == numb}"> {{ numb }} </div>
+    </div>
+</div>
+<div style="margin: 0 auto; margin-top: 20px;">
+    <span>Given numbers</span>
+    <input type="number"style="width: 40px; height: 20px; margin-right: 40px; margin-left: 10px" [(ngModel)]="givenNumbers">
+    <button (click)="newGame()" style="height: 30px;"> New Game </button>
+</div>
