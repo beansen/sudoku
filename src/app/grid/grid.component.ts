@@ -12,7 +12,6 @@ const worker = new Worker(new URL('../board-creator.worker', import.meta.url));
 export class GridComponent implements OnInit, OnDestroy {
 
   startingBoard : Cell[] = [];
-  selectedNumber = 0;
   errors = 0;
   sudokuNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   givenNumbers = 40;
@@ -22,6 +21,7 @@ export class GridComponent implements OnInit, OnDestroy {
   timeCounter: number = 0;
   timerInterval = interval(1000);
   timerSubscription = new Subscription();
+  selectedCell: Cell | undefined = undefined;
 
   ngOnInit(): void {
     worker.onmessage=({ data }) => {
@@ -32,6 +32,8 @@ export class GridComponent implements OnInit, OnDestroy {
       for (let i = 1; i < 10; i++) {
         this.checkSolvedNumbers(i);
       }
+
+      this.selectedCell = this.startingBoard[0];
 
       this.timerSubscription = this.timerInterval.subscribe(val => {
         this.timeCounter = val;
@@ -52,7 +54,6 @@ export class GridComponent implements OnInit, OnDestroy {
       this.solvedNumbers = [];
       this.generatingGame = true;
       this.errors = 0;
-      this.selectedNumber = 0;
       worker.postMessage({
         startingBoard: this.startingBoard,
         givenNumbers: this.givenNumbers
@@ -67,18 +68,7 @@ export class GridComponent implements OnInit, OnDestroy {
   }
 
   clickedCell(cell: Cell) {
-    if (this.selectedNumber != 0 && !cell.visible) {
-      if (cell.value == this.selectedNumber) {
-        cell.visible = true;
-        this.checkSolvedNumbers(this.selectedNumber);
-
-        if (this.solvedNumbers.length == 9) {
-          this.timerSubscription.unsubscribe();
-        }
-      } else {
-        this.errors++;
-      }
-    } 
+    this.selectedCell = cell;
   }
 
   checkSolvedNumbers(numb: number) {
@@ -89,7 +79,19 @@ export class GridComponent implements OnInit, OnDestroy {
   }
 
   selectNumber(numb: number) {
-    this.selectedNumber = numb;
+    if (this.selectedCell && !this.selectedCell.visible) {
+      let cell = this.startingBoard[this.selectedCell.row * 9 + this.selectedCell.column];
+      if (cell.value == numb) {
+        cell.visible = true;
+        this.checkSolvedNumbers(numb);
+
+        if (this.solvedNumbers.length == 9) {
+          this.timerSubscription.unsubscribe();
+        }
+      } else {
+        this.errors++;
+      }
+    }
   }
 
   getTimeFormated(time: number) {

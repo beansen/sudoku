@@ -34,8 +34,7 @@ function initGrid(startingBoard: Cell[]) {
           row: y,
           column: x,
           box: box,
-          visible: false,
-          possibleValues: generatePossibleValues()
+          visible: false
         });
       }
     }
@@ -43,7 +42,6 @@ function initGrid(startingBoard: Cell[]) {
     for (let i = 0; i < startingBoard.length; i++) {
       startingBoard[i].value = 0;
       startingBoard[i].visible = false;
-      startingBoard[i].possibleValues = generatePossibleValues();
     }
   }
 
@@ -77,8 +75,7 @@ function removeValues(amount: number, startingBoard: Cell[]) {
           row: startingBoard[i].row,
           column: startingBoard[i].column,
           box: startingBoard[i].box,
-          visible: startingBoard[i].value != 0 ? true : false,
-          possibleValues: generatePossibleValues()
+          visible: startingBoard[i].value != 0 ? true : false
         };
       }
 
@@ -87,10 +84,6 @@ function removeValues(amount: number, startingBoard: Cell[]) {
         removedValues--;
       }
     }
-  }
-
-  for (let i = 0; i < gridCopy.length; i++) {
-    gridCopy[i].possibleValues = gridCopy[i].visible ? [] : generatePossibleValues();
   }
 
   return gridCopy;
