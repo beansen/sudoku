@@ -22,6 +22,7 @@ export class GridComponent implements OnInit, OnDestroy {
   timerInterval = interval(1000);
   timerSubscription = new Subscription();
   selectedCell: Cell | undefined = undefined;
+  gamePaused: boolean = false;
 
   ngOnInit(): void {
     worker.onmessage=({ data }) => {
@@ -36,9 +37,11 @@ export class GridComponent implements OnInit, OnDestroy {
       this.selectedCell = this.startingBoard[0];
 
       this.timerSubscription = this.timerInterval.subscribe(val => {
-        this.timeCounter = val;
-        const elapsedTime = val + (this.errors * 15);
-        this.timerOutput = this.getTimeFormated(elapsedTime);
+        if (!this.gamePaused) {
+          this.timeCounter++;
+          const elapsedTime = this.timeCounter + (this.errors * 15);
+          this.timerOutput = this.getTimeFormated(elapsedTime);
+        }
       });
     };
     this.newGame();
@@ -79,7 +82,7 @@ export class GridComponent implements OnInit, OnDestroy {
   }
 
   selectNumber(numb: number) {
-    if (this.selectedCell && !this.selectedCell.visible) {
+    if (this.selectedCell && !this.selectedCell.visible && !this.gamePaused) {
       let cell = this.startingBoard[this.selectedCell.row * 9 + this.selectedCell.column];
       if (cell.value == numb) {
         cell.visible = true;
@@ -98,5 +101,9 @@ export class GridComponent implements OnInit, OnDestroy {
     const minutes = Math.floor(time / 60) + ":";
     const seconds = time % 60;
     return minutes + (seconds < 10 ? "0" + seconds : seconds);
+  }
+
+  pauseGame() {
+    this.gamePaused = !this.gamePaused;
   }
 }

@@ -18,6 +18,13 @@
     margin-right: 5px;
 }
 
+.pausebtn {
+    float: left;
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+}
+
 .board {
     width: 370px;
     height: 370px;
