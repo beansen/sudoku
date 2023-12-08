@@ -53,6 +53,7 @@ export class GridComponent implements OnInit, OnDestroy {
 
   newGame() {
     if (this.givenNumbers >= 17 && this.givenNumbers <= 81) {
+      this.gamePaused = false;
       this.timerSubscription.unsubscribe();
       this.solvedNumbers = [];
       this.generatingGame = true;
