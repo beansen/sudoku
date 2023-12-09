@@ -39,8 +39,7 @@ export class GridComponent implements OnInit, OnDestroy {
       this.timerSubscription = this.timerInterval.subscribe(val => {
         if (!this.gamePaused) {
           this.timeCounter++;
-          const elapsedTime = this.timeCounter + (this.errors * 15);
-          this.timerOutput = this.getTimeFormated(elapsedTime);
+          this.timerOutput = this.getTimeFormated(this.timeCounter);
         }
       });
     };
@@ -94,6 +93,10 @@ export class GridComponent implements OnInit, OnDestroy {
         }
       } else {
         this.errors++;
+
+        if (this.errors == 3) {
+          this.gamePaused = true
+        }
       }
     }
   }
@@ -106,5 +109,9 @@ export class GridComponent implements OnInit, OnDestroy {
 
   pauseGame() {
     this.gamePaused = !this.gamePaused;
+  }
+
+  getSolvedPercentage() {
+    return Math.floor(this.startingBoard.filter(cell => cell.visible).length * 100 / 81);
   }
 }
