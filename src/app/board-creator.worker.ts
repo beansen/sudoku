@@ -58,8 +58,10 @@ function removeValues(amount: number, startingBoard: Cell[]) {
     return startingBoard;
   }
 
+  let numberToRemove = Math.floor(Math.random() * 9) + 1;
+
   while (removedValues < amount) {
-    const cells = startingBoard.filter(cell => cell.value != 0);
+    const cells = startingBoard.filter(cell => cell.value == numberToRemove);
     const cell = cells[Math.floor(Math.random() * cells.length)];
 
     if (cell.value != 0) {
@@ -82,6 +84,11 @@ function removeValues(amount: number, startingBoard: Cell[]) {
       if (!solveGrid(gridCopy)) {
         cell.value = originalValue;
         removedValues--;
+      } else {
+        numberToRemove++;
+        if (numberToRemove == 10) {
+          numberToRemove = 1;
+        }
       }
     }
   }
